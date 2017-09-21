@@ -31,20 +31,28 @@
   <h1>Brainwallet HD</h1>
   <p>
     <label for="password">Unique passphrase:</label>
-    <br />
+    <!-- <br /> -->
     <input id="password" name="password" type="text" value="" size="100">
   </p>
   <p>
-    <label for="salt">Salt (your email):</label>
-    <br />
+    <label for="salt">Your email as a salt:</label>
+    <!-- <br /> -->
     <input id="salt" name="salt" type="text" value="" size="50">
   </p>
-  <button id="calculate" onclick="calculate()">Calculate</button>
+  <button id="calculate" onclick="calculate()"></button>
   <div id="out"></div>
 
 <script src="./scrypt-async.js"></script>
 <script src="./bip39.js"></script>
+
 <script>
+
+function resetButton(btn) {
+  btn.disabled = false;
+  btn.innerText = 'Generate mnemonic';
+}
+
+resetButton(document.querySelector('#calculate'))
 
 var getTime = (function () {
     if (typeof performance !== "undefined") {
@@ -62,8 +70,9 @@ function calculate() {
   var salt = document.querySelector('#salt').value;
 
   btn.disabled = true;
-  btn.innerHTML = 'Wait...';
-
+  btn.innerHTML = 'Scrypting...';
+  var scryptText = 'Scrypt params: log₂N = 19, r = 8, p = 1, dkLen = 16<br />'
+  out.innerHTML = scryptText;
   window.setTimeout(function() {
     try {
       var t1 = getTime();
@@ -77,18 +86,17 @@ function calculate() {
       },
       function(res) {
         var t2 = getTime() - t1;
-        var mnemonic = bip39.entropyToMnemonic(res)
-        out.innerHTML = 'Time: ' + Math.round(t2) + ' ms<br />' +
+        var mnemonic = bip39.entropyToMnemonic(res);
+        out.innerHTML = scryptText +
+          'Time: ' + Math.round(t2) + ' ms<br />' +
           'Entropy: ' + res + '<br />' +
           'BIP39 Mnemonic:<br /><b>' + mnemonic + '</b>'
           ;
-        btn.disabled = false;
-        btn.innerHTML = 'Calculate';
+          resetButton(btn);
       });
     } catch(ex) {
         out.innerHTML = '<span style="color:red">error: ' + ex.message + '</span>';
-        btn.disabled = false;
-        btn.innerHTML = 'Calculate';
+        resetButton(btn);
     }
   });
 }
