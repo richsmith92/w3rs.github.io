@@ -30,54 +30,22 @@
 
 <body>
   <h1>Brainwallet HD</h1>
-  <form>
-    <p>
-      <label for="password">Unique passphrase:</label>
-      <br />
-      <input id="password" name="password" type="text" value="" size="100">
-    </p>
-    <p>
-      <label for="salt">Salt (your email):</label>
-      <br />
-      <input id="salt" name="salt" type="text" value="" size="50">
-    </p>
-    <!-- <p>
-      <label for="interruptStep">interruptStep:</label>
-      <input id="interruptStep" name="interruptStep" type="text" value="0" size="8">
-    </p> -->
-    <!-- <p>
-      <label for="logN">logN:</label>
-      <input id="logN" name="logN" type="text" value="19" size="4" onkeypress="updateN()" onkeyup="updateN()" onblur="updateN()" onchange="updateN()">
-      <label for="r">r:</label>
-      <input id="r" name="r" type="text" value="8" size="4">
-      <label for="p">p:</label>
-      <input id="p" name="p" type="text" value="1" size="4">
-      <span id="N">N = 2048</span>
-    </p> -->
-    <!-- <p>
-      <label for="encoding">Encoding:</label>
-      <select id="encoding" name="encoding">
-        <option value="hex" selected="">hex</option>
-        <option value="base64">base64</option>
-        <option value="binary">binary</option>
-      </select>
-    </p> -->
-</form>
-<button id="calculate" onclick="calculate()">Calculate</button>
-<div id="out"></div>
+  <p>
+    <label for="password">Unique passphrase:</label>
+    <br />
+    <input id="password" name="password" type="text" value="" size="100">
+  </p>
+  <p>
+    <label for="salt">Salt (your email):</label>
+    <br />
+    <input id="salt" name="salt" type="text" value="" size="50">
+  </p>
+  <button id="calculate" onclick="calculate()">Calculate</button>
+  <div id="out"></div>
 
 <script src="./scrypt-async.js"></script>
 <script src="./bip39.js"></script>
 <script>
-
-
-var f = document.forms[0];
-
-// function updateN() {
-//   var fN = document.querySelector('#N');
-//   var logN = f.logN.value;
-//   fN.innerHTML = 'N = ' + Math.pow(2, logN);
-// }
 
 var getTime = (function () {
     if (typeof performance !== "undefined") {
@@ -91,13 +59,8 @@ function calculate() {
   var btn = document.querySelector('#calculate')
   var out = document.querySelector('#out');
 
-  var password = f.password.value;
-  var salt = f.salt.value;
-  // var interruptStep = f.interruptStep.value;
-  // var logN = f.logN.value;
-  // var r = f.r.value;
-  // var p = f.p.value;
-  // var encoding = 'hex';
+  var password = document.querySelector('#password').value;
+  var salt = document.querySelector('#salt').value;
 
   btn.disabled = true;
   btn.innerHTML = 'Wait...';
@@ -106,9 +69,6 @@ function calculate() {
     try {
       var t1 = getTime();
       scrypt(password, salt, {
-          // logN: logN,
-          // r: r,
-          // p: p,
           logN: 19,
           r: 8,
           p: 1,
@@ -134,7 +94,6 @@ function calculate() {
   });
 }
 
-// updateN();
 </script>
 
 
